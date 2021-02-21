@@ -25,5 +25,13 @@ namespace FootBallPool.Models
             throw new UnintentionalCodeFirstException();
         }
     
+        public virtual DbSet<League> Leagues { get; set; }
+        public virtual DbSet<Match> Matches { get; set; }
+        public virtual DbSet<MatchPool> MatchPools { get; set; }
+        public virtual DbSet<MatchWeek> MatchWeeks { get; set; }
+        public virtual DbSet<Pool> Pools { get; set; }
+        public virtual DbSet<sysdiagram> sysdiagrams { get; set; }
+        public virtual DbSet<Team> Teams { get; set; }
+        public virtual DbSet<User> Users { get; set; }
     }
 }
