@@ -1,0 +1,56 @@
+﻿@model FootBallPool.Models.MatchWeek
+@{
+    ViewBag.Title = "AddMatchWeek";
+}
+
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('.date').datetimepicker({
+            //format:"DD/MM/YYYY",
+        });
+    });
+</script>
+
+<h2>AddMatchWeek</h2>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken();
+    @Html.HiddenFor(m => m.LeagueID)
+    <div class="form-horizontal" style="text-align:center">
+        <div class="form-group">
+            <div class="col-xs-3">Name</div>
+            <div class="col-xs-3">
+                @Html.TextBoxFor(m => m.Name, new { @class = "form-control" })
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-xs-3">Start Date</div>
+            <div class="col-xs-3">
+                <div class='input-group date'>
+                    @Html.TextBoxFor(m => m.StarDate, new { @class = "form-control" })
+                    <span class="input-group-addon">
+                        <span class="glyphicon glyphicon-calendar"></span>
+                    </span>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-xs-3">End Date</div>
+            <div class="col-xs-3">
+                <div class='input-group date'>
+                    @Html.TextBoxFor(m => m.EndDate, new { @class = "form-control" })
+                    <span class="input-group-addon">
+                        <span class="glyphicon glyphicon-calendar"></span>
+                    </span>
+                </div>
+            </div>
+        </div>
+
+        <button class="btn btn-success" type="submit">Save</button>
+        <a href="@Url.Action("MatchWeek","League",new { id = Model.LeagueID})" class="btn btn-primary">Cancel</a>
+    </div>
+
+}
+

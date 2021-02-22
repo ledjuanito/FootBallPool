@@ -1,0 +1,35 @@
+﻿@model FootBallPool.Models.Match
+@{
+    ViewBag.Title = "AddFixture";
+}
+
+<h2>AddFixture</h2>
+<hr />
+
+@using (Html.BeginForm("AddFixture", "League"))
+{
+    @Html.AntiForgeryToken()
+    @Html.HiddenFor(m => m.MatchWeekID)
+
+    <div class="row">
+        <div class="col-xs-3">
+            @Html.DropDownListFor(m => m.LocalTeam,(SelectList)ViewBag.Teams,null,new { @class="form-control"})
+        </div>
+        <div class="col-xs-2">
+            @Html.TextBoxFor(m => m.LocalScore, new {@type="numeric",@class="form-control" })
+        </div>
+        <div class="col-xs-2">
+            <strong>VS</strong>
+        </div>
+        <div class="col-xs-2">
+            @Html.TextBoxFor(m => m.VisitorScore, new { @type = "numeric", @class = "form-control" })
+        </div>
+        <div class="col-xs-3">
+            @Html.DropDownListFor(m => m.VisitorTeam, (SelectList)ViewBag.Teams, null, new { @class = "form-control" })
+        </div>
+    </div>
+    <button type="submit" class="btn btn-success">Save</button>
+    <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+
+}
+
