@@ -1,38 +1,37 @@
-﻿@model IEnumerable<FootBallPool.Models.Match>
+﻿@model FootBallPool.Models.Fixtures
 @{
     ViewBag.Title = "Fixtures & Results";
-    Dictionary<int, FootBallPool.Models.Team> TeamMap = (Dictionary<int, FootBallPool.Models.Team>)ViewBag.Teams;
 }
 
 <h2>Fixtures & Results</h2>
 <hr />
 @if ((bool)ViewBag.allowAdd)
 {
-    <a class="btn btn-default" href="@Url.Action("AddFixture","League",new { id = (int)ViewBag.MatchWeekID })"><i class="fas fa-futbol" style="font-size:2vh"></i> Add Match</a>
+    <a class="btn btn-default" href="@Url.Action("AddFixture","League",new { id = Model.matchWeek.FirstOrDefault().Key })"><i class="fas fa-futbol" style="font-size:2vh"></i> Add Match</a>
 }
 
 @{
     string matchweek = null;
-    foreach (var item in Model)
+    foreach (var item in Model.Index)
     {
-        if (matchweek != item.MatchWeek.Name)
+        if (Model.matchWeek.ContainsKey(item.MatchWeekID) && matchweek != Model.matchWeek[item.MatchWeekID].Name)
         {
-            matchweek = item.MatchWeek.Name;
+            matchweek = Model.matchWeek[item.MatchWeekID].Name;
             <br />
-            <h1 style="text-align:center;background-color:darkred;color:white;border-radius:5px">@item.MatchWeek.Name</h1>
+            <h1 style="text-align:center;background-color:darkred;color:white;border-radius:5px">@matchweek</h1>
 
         }
 
         <div class="match">
-            <h3>@item.MatchWeek.Name</h3>
+            <h3>@matchweek</h3>
             <div class="row">
                 <div class="col-xs-6">
-                    <strong>@TeamMap[item.LocalTeam].Name</strong>
-                    <img src="@TeamMap[item.LocalTeam].Image" />
+                    <strong>@Model.Teams[item.LocalTeam].Name</strong>
+                    <img src="@Model.Teams[item.LocalTeam].Image" />
                 </div>
                 <div class="col-xs-6">
-                    <strong>@TeamMap[item.VisitorTeam].Name</strong>
-                    <img src="@TeamMap[item.VisitorTeam].Image" />
+                    <strong>@Model.Teams[item.VisitorTeam].Name</strong>
+                    <img src="@Model.Teams[item.VisitorTeam].Image" />
                 </div>
 
                 <h2 class="result">@item.LocalScore - @item.VisitorScore</h2>

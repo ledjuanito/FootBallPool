@@ -1,4 +1,8 @@
-﻿using FootBallPool.Models;
+﻿using Amazon.DynamoDBv2;
+using Amazon.DynamoDBv2.DataModel;
+using Amazon.DynamoDBv2.DocumentModel;
+using DynamoDBConection;
+using FootBallPool.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,7 +15,7 @@ namespace FootBallPool.Controllers
 {
     public class AccountController : Controller
     {
-        private FootballPoolEntities db = new FootballPoolEntities();
+        DynamoDBContext context = new DynamoDBContext(new DynamoDBInitializer().client);
         // GET: Account
         [AllowAnonymous]
         public ActionResult Login(string returnUrl)
@@ -35,10 +39,14 @@ namespace FootBallPool.Controllers
             {
                 return View(model);
             }
+            User user = context.Load<User>(model.Username);
 
-            var user = db.Users.FirstOrDefault(u => u.UserID.Equals(model.Username, StringComparison.CurrentCultureIgnoreCase) && u.Password.Equals(model.Password, StringComparison.CurrentCultureIgnoreCase));
+            //List<ScanCondition> conditions = new List<ScanCondition>();
+            //conditions.Add(new ScanCondition("UserID", ScanOperator.Equal, model.Username));
+            //conditions.Add(new ScanCondition("Password", ScanOperator.Equal, model.Password));
+            //User user = context.Scan<User>(conditions.ToArray()).FirstOrDefault();
 
-            if (user != null)
+            if (user != null && user.Password == model.Password)
             {
                 FormsAuthentication.SetAuthCookie(user.UserID, false);
                 Session["User"] = user.Info;
@@ -82,7 +90,7 @@ namespace FootBallPool.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            User user = db.Users.Find(id);
+            User user = context.Load<User>(id); 
             if (user == null)
             {
                 return HttpNotFound();
@@ -119,9 +127,13 @@ namespace FootBallPool.Controllers
 
         public void ChangePassDB(string id, string password)
         {
-            var user = db.Users.Find(id);
-            user.Password = password;
-            db.SaveChanges();
+            User user = context.Load<User>(id);
+            if (user != null)
+            {
+                user.Password = password;
+                context.SaveAsync<User>(user);
+            }
+            
             ////To see entity errors deaitl//****
             //try
             //{

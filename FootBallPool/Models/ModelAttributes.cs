@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Amazon.DynamoDBv2.DataModel;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -9,8 +10,14 @@ namespace FootBallPool.Models
     //User 
     #region User
     [MetadataType(typeof(UserMetaData))]
-    public partial class User
+    //[DynamoDBTable("User")]
+    public class User
     {
+        public string UserID { get; set; }
+        public string Name { get; set; }
+        public string LastName { get; set; }
+        public string Password { get; set; }
+        public string Email { get; set; }
         public UserInfo Info
         {
             get
@@ -90,14 +97,16 @@ namespace FootBallPool.Models
     //League
     #region League
     [MetadataType(typeof(LeagueMetaData))]
-    public partial class League
+    public class League
     {
-
+        public string LeagueID { get; set; }
+        public string Name { get; set; }
+        public string Image { get; set; }
     }
 
     public class LeagueMetaData
     {
-        public int LeagueID { get; set; }
+        public string LeagueID { get; set; }
         [Display(Name = "Name")]
         [MaxLength(50, ErrorMessage = "Max length = 50 characters")]
         public string Name { get; set; }
@@ -110,10 +119,27 @@ namespace FootBallPool.Models
 
     //Team
     #region Team
-    [MetadataType(typeof(TeamMetaData))]
-    public partial class Team
+    public class TeamIndex
     {
+        public IEnumerable<Team> Index { get; set; }
+        public League League { get; set; }
 
+        public TeamIndex()
+        {
+            Index = new List<Team>();
+            League = new League();
+        }
+    }
+
+    [MetadataType(typeof(TeamMetaData))]
+    public class Team
+    {
+        public string TeamID { get; set; }
+        public string LeagueID { get; set; }
+        public string Name { get; set; }
+        public string Image { get; set; }
+
+        public League League { get; set; }
     }
     public class TeamMetaData
     {
@@ -125,4 +151,80 @@ namespace FootBallPool.Models
     }
     #endregion
 
+    public class Fixtures
+    {
+        public IEnumerable<Match> Index { get; set; }
+        public Dictionary<string,MatchWeek> matchWeek { get; set; }
+        public Dictionary<string,Team> Teams { get; set; }
+        public Fixtures()
+        {
+            Index = new List<Match>();
+            matchWeek = new Dictionary<string,MatchWeek>();
+            Teams = new Dictionary<string, Team>();
+        }
+    }
+
+    public class PoolMember
+    {
+        public string PoolID { get; set; }
+        public string UserID { get; set; }
+
+    }
+
+    public class Pool
+    {
+        public string PoolID { get; set; }
+        public string Name { get; set; }
+        public string LeagueID { get; set; }
+
+    }
+
+    public class MatchWeekIndex
+    {
+        public IEnumerable<MatchWeek> Index { get; set; }
+        public League League { get; set; }
+
+
+        public MatchWeekIndex()
+        {
+            Index = new List<MatchWeek>();
+            League = new League();
+        }
+    }
+
+    public class MatchWeek
+    {
+        public string MatchWeekID { get; set; }
+        public string Name { get; set; }
+        public string LeagueID { get; set; }
+        public System.DateTime StarDate { get; set; }
+        public System.DateTime EndDate { get; set; }
+
+        public League League { get; set; }
+    }
+
+    public class MatchPool
+    {
+        public string MatchPoolID { get; set; }
+        public string MatchWeekID { get; set; }
+        public string UserID { get; set; }
+        public Nullable<int> LocalScore { get; set; }
+        public Nullable<int> VisitorScore { get; set; }
+        public int Score { get; set; }
+        public string IsSaved { get; set; }
+        public string PoolID { get; set; }
+        public string MatchID { get; set; }
+
+    }
+
+    public class Match
+    {
+        public string MatchID { get; set; }
+        public string MatchWeekID { get; set; }
+        public string LocalTeam { get; set; }
+        public string VisitorTeam { get; set; }
+        public int LocalScore { get; set; }
+        public int VisitorScore { get; set; }
+
+    }
 }

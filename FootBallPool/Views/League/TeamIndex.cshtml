@@ -1,21 +1,24 @@
-﻿@model IEnumerable<FootBallPool.Models.Team>
+﻿@model FootBallPool.Models.TeamIndex
 @{
     ViewBag.Title = "TeamIndex";
 }
 
 <h2>Teams</h2>
 <hr />
-<a class="btn btn-default" href="@Url.Action("AddTeam","League",new { id = (int)ViewBag.LeagueID })">Add Team</a>
+<a class="btn btn-default" href="@Url.Action("AddTeam","League",new { id = Model.League.LeagueID })">Add Team</a>
 <table class="table table-striped">
     <thead>
         <tr>
-            <th>@Html.DisplayNameFor(m => m.Image)</th>
-            <th>@Html.DisplayNameFor(m => m.Name)</th>
-            <th>@Html.DisplayNameFor(m => m.LeagueID)</th>
+            @if (Model.Index.Count() > 0)
+            {
+                <th>@Html.DisplayNameFor(m => m.Index.FirstOrDefault().Image)</th>
+                <th>@Html.DisplayNameFor(m => m.Index.FirstOrDefault().Name)</th>
+                <th>@Html.DisplayNameFor(m => m.Index.FirstOrDefault().LeagueID)</th>
+            }
         </tr>
     </thead>
     <tbody>
-        @foreach (var item in Model)
+        @foreach (var item in Model.Index)
         {
         <tr>
             <td>
@@ -25,7 +28,7 @@
                 @Html.DisplayTextFor(m => item.Name)
             </td>
             <td>
-                @Html.DisplayTextFor(m => item.League.Name)
+                @Html.DisplayTextFor(m => Model.League.Name)
             </td>
         </tr>
         }
