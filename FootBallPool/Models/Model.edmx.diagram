@@ -4,23 +4,24 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="a14a3ab92d5a43b89e47238c8ae1067f" Name="Diagram1" ZoomLevel="34">
-        <EntityTypeShape EntityType="FootballPoolModel.League" Width="1.5" PointX="0.75" PointY="6.25" />
-        <EntityTypeShape EntityType="FootballPoolModel.Match" Width="1.5" PointX="5.25" PointY="5.875" />
-        <EntityTypeShape EntityType="FootballPoolModel.MatchPool" Width="1.5" PointX="7.5" PointY="7.25" />
-        <EntityTypeShape EntityType="FootballPoolModel.MatchWeek" Width="1.5" PointX="3" PointY="5.75" />
-        <EntityTypeShape EntityType="FootballPoolModel.Pool" Width="1.5" PointX="3" PointY="9.25" />
-        <EntityTypeShape EntityType="FootballPoolModel.sysdiagram" Width="1.5" PointX="5.75" PointY="0.75" />
-        <EntityTypeShape EntityType="FootballPoolModel.Team" Width="1.5" PointX="3" PointY="3.125" />
-        <EntityTypeShape EntityType="FootballPoolModel.User" Width="1.5" PointX="5.25" PointY="9.125" />
+      <Diagram DiagramId="a14a3ab92d5a43b89e47238c8ae1067f" Name="Diagram1" ZoomLevel="72">
+        <EntityTypeShape EntityType="FootballPoolModel.League" Width="1.5" PointX="0.75" PointY="6.125" />
+        <EntityTypeShape EntityType="FootballPoolModel.Match" Width="1.5" PointX="5.25" PointY="3.125" />
+        <EntityTypeShape EntityType="FootballPoolModel.MatchWeek" Width="1.5" PointX="3" PointY="3.125" />
+        <EntityTypeShape EntityType="FootballPoolModel.sysdiagram" Width="1.5" PointX="7.75" PointY="0.75" />
+        <EntityTypeShape EntityType="FootballPoolModel.Team" Width="1.5" PointX="3" PointY="9.5" />
+        <EntityTypeShape EntityType="FootballPoolModel.User" Width="1.5" PointX="5.25" PointY="6.375" />
         <AssociationConnector Association="FootballPoolModel.FK_MatchWeek_League" />
-        <AssociationConnector Association="FootballPoolModel.FK_Pool_League" />
         <AssociationConnector Association="FootballPoolModel.FK_Team_League" />
         <AssociationConnector Association="FootballPoolModel.FK_Match_MatchWeek" />
-        <AssociationConnector Association="FootballPoolModel.FK_MatchPool_MatchWeek" />
+        <EntityTypeShape EntityType="FootballPoolModel.Pool" Width="1.5" PointX="3" PointY="0.75" />
+        <AssociationConnector Association="FootballPoolModel.FK_Pool_League" />
+        <EntityTypeShape EntityType="FootballPoolModel.PoolMember" Width="1.5" PointX="5.25" PointY="0.75" />
+        <AssociationConnector Association="FootballPoolModel.FK_PoolMember_Pool" />
+        <EntityTypeShape EntityType="FootballPoolModel.MatchPool" Width="1.5" PointX="7.5" PointY="4.25" />
+        <AssociationConnector Association="FootballPoolModel.FK_MatchPool_Match" />
         <AssociationConnector Association="FootballPoolModel.FK_MatchPool_User" />
-        <AssociationConnector Association="FootballPoolModel.PoolMember" />
-      </Diagram>
+        </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
 </edmx:Edmx>

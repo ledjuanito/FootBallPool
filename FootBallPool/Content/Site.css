@@ -22,3 +22,22 @@ select,
 textarea {
     max-width: 280px;
 }
+
+
+.match {
+    width: 30vh;
+    text-align: center;
+    border: solid 1px gray;
+    border-radius: 5px;
+    display:inline-block;
+    overflow:hidden;
+}
+
+    .match img {
+        width: 8vh;
+    }
+
+    .match .result {
+        font-weight: 800;
+        color: lightgray
+    }

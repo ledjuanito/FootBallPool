@@ -18,7 +18,6 @@ namespace FootBallPool.Models
         public MatchWeek()
         {
             this.Matches = new HashSet<Match>();
-            this.MatchPools = new HashSet<MatchPool>();
         }
     
         public int MatchWeekID { get; set; }
@@ -30,7 +29,5 @@ namespace FootBallPool.Models
         public virtual League League { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Match> Matches { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<MatchPool> MatchPools { get; set; }
     }
 }

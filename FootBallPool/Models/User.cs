@@ -18,7 +18,6 @@ namespace FootBallPool.Models
         public User()
         {
             this.MatchPools = new HashSet<MatchPool>();
-            this.Pools = new HashSet<Pool>();
         }
     
         public string UserID { get; set; }
@@ -29,7 +28,5 @@ namespace FootBallPool.Models
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<MatchPool> MatchPools { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Pool> Pools { get; set; }
     }
 }

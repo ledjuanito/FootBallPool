@@ -1,0 +1,46 @@
+﻿@model IEnumerable<FootBallPool.Models.MatchWeek>
+
+@{
+    ViewBag.Title = "MatchWeek";
+}
+
+<h2>MatchWeek</h2>
+<hr />
+
+<a href="@Url.Action("AddMatchWeek","League",new { id=ViewBag.LeagueID})" class="btn btn-default">Add Match Week</a>
+<a class="btn btn-default" href="@Url.Action("FixturesAndResults","League",new { id=ViewBag.LeagueID})"><i class="fas fa-futbol" style="font-size:2vh"></i> All Matchweeks</a>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Liga</th>
+            <th>Week</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.Label(item.Name)
+                </td>
+                <td>
+                    @Html.Label(item.League.Name)
+                </td>
+                <td>
+                    @Html.Label(item.StarDate.ToString())
+                </td>
+                <td>
+                    <a href="@Url.Action("Fixtures","League",new { id =item.MatchWeekID })" data-toggle="tooltip" title="Fixtures & Results" style="padding:0 10px">
+                        <i class="fas fa-running" style="font-size:3vh"></i>
+                        <i class="fas fa-futbol" style="font-size:2vh"></i>
+                        <i class="fas fa-running" style="font-size:3vh"></i>
+                    </a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+

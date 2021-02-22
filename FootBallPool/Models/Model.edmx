@@ -9,17 +9,18 @@
           <Key>
             <PropertyRef Name="LeagueID" />
           </Key>
-          <Property Name="LeagueID" Type="int" Nullable="false" />
+          <Property Name="LeagueID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Name" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Image" Type="varchar" MaxLength="250" />
         </EntityType>
         <EntityType Name="Match">
           <Key>
             <PropertyRef Name="MatchID" />
           </Key>
-          <Property Name="MatchID" Type="int" Nullable="false" />
+          <Property Name="MatchID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="MatchWeekID" Type="int" Nullable="false" />
-          <Property Name="LocalTeam" Type="varchar" MaxLength="50" Nullable="false" />
-          <Property Name="VisitorTeam" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="LocalTeam" Type="int" Nullable="false" />
+          <Property Name="VisitorTeam" Type="int" Nullable="false" />
           <Property Name="LocalScore" Type="int" Nullable="false" />
           <Property Name="VisitorScore" Type="int" Nullable="false" />
         </EntityType>
@@ -27,23 +28,25 @@
           <Key>
             <PropertyRef Name="MatchPoolID" />
           </Key>
-          <Property Name="MatchPoolID" Type="int" Nullable="false" />
+          <Property Name="MatchPoolID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="MatchWeekID" Type="int" Nullable="false" />
           <Property Name="UserID" Type="varchar" MaxLength="50" Nullable="false" />
           <Property Name="LocalScore" Type="int" />
           <Property Name="VisitorScore" Type="int" />
           <Property Name="Score" Type="int" Nullable="false" />
           <Property Name="IsSaved" Type="varchar" MaxLength="1" Nullable="false" />
+          <Property Name="PoolID" Type="int" Nullable="false" />
+          <Property Name="MatchID" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="MatchWeek">
           <Key>
             <PropertyRef Name="MatchWeekID" />
           </Key>
-          <Property Name="MatchWeekID" Type="int" Nullable="false" />
+          <Property Name="MatchWeekID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Name" Type="varchar" MaxLength="50" Nullable="false" />
           <Property Name="LeagueID" Type="int" Nullable="false" />
-          <Property Name="StarDate" Type="date" Nullable="false" />
-          <Property Name="EndDate" Type="date" Nullable="false" />
+          <Property Name="StarDate" Type="datetime" Nullable="false" />
+          <Property Name="EndDate" Type="datetime" Nullable="false" />
         </EntityType>
         <EntityType Name="Pool">
           <Key>
@@ -75,10 +78,10 @@
           <Key>
             <PropertyRef Name="TeamID" />
           </Key>
-          <Property Name="TeamID" Type="int" Nullable="false" />
+          <Property Name="TeamID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="LeagueID" Type="int" Nullable="false" />
           <Property Name="Name" Type="varchar" MaxLength="50" Nullable="false" />
-          <Property Name="Image" Type="varchar" MaxLength="50" />
+          <Property Name="Image" Type="varchar" MaxLength="250" />
         </EntityType>
         <EntityType Name="User">
           <Key>
@@ -102,15 +105,15 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_MatchPool_MatchWeek">
-          <End Role="MatchWeek" Type="Self.MatchWeek" Multiplicity="1" />
+        <Association Name="FK_MatchPool_Match">
+          <End Role="Match" Type="Self.Match" Multiplicity="1" />
           <End Role="MatchPool" Type="Self.MatchPool" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="MatchWeek">
-              <PropertyRef Name="MatchWeekID" />
+            <Principal Role="Match">
+              <PropertyRef Name="MatchID" />
             </Principal>
             <Dependent Role="MatchPool">
-              <PropertyRef Name="MatchWeekID" />
+              <PropertyRef Name="MatchID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -127,7 +130,9 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_MatchWeek_League">
-          <End Role="League" Type="Self.League" Multiplicity="1" />
+          <End Role="League" Type="Self.League" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
           <End Role="MatchWeek" Type="Self.MatchWeek" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="League">
@@ -139,7 +144,9 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_Pool_League">
-          <End Role="League" Type="Self.League" Multiplicity="1" />
+          <End Role="League" Type="Self.League" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
           <End Role="Pool" Type="Self.Pool" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="League">
@@ -162,20 +169,10 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_PoolMember_User">
-          <End Role="User" Type="Self.User" Multiplicity="1" />
-          <End Role="PoolMember" Type="Self.PoolMember" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="User">
-              <PropertyRef Name="UserID" />
-            </Principal>
-            <Dependent Role="PoolMember">
-              <PropertyRef Name="UserID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK_Team_League">
-          <End Role="League" Type="Self.League" Multiplicity="1" />
+          <End Role="League" Type="Self.League" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
           <End Role="Team" Type="Self.Team" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="League">
@@ -200,8 +197,8 @@
             <End Role="MatchWeek" EntitySet="MatchWeek" />
             <End Role="Match" EntitySet="Match" />
           </AssociationSet>
-          <AssociationSet Name="FK_MatchPool_MatchWeek" Association="Self.FK_MatchPool_MatchWeek">
-            <End Role="MatchWeek" EntitySet="MatchWeek" />
+          <AssociationSet Name="FK_MatchPool_Match" Association="Self.FK_MatchPool_Match">
+            <End Role="Match" EntitySet="Match" />
             <End Role="MatchPool" EntitySet="MatchPool" />
           </AssociationSet>
           <AssociationSet Name="FK_MatchPool_User" Association="Self.FK_MatchPool_User">
@@ -220,10 +217,6 @@
             <End Role="Pool" EntitySet="Pool" />
             <End Role="PoolMember" EntitySet="PoolMember" />
           </AssociationSet>
-          <AssociationSet Name="FK_PoolMember_User" Association="Self.FK_PoolMember_User">
-            <End Role="User" EntitySet="User" />
-            <End Role="PoolMember" EntitySet="PoolMember" />
-          </AssociationSet>
           <AssociationSet Name="FK_Team_League" Association="Self.FK_Team_League">
             <End Role="League" EntitySet="League" />
             <End Role="Team" EntitySet="Team" />
@@ -236,19 +229,13 @@
         <EntityContainer Name="FootballPoolEntities" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="Leagues" EntityType="FootballPoolModel.League" />
           <EntitySet Name="Matches" EntityType="FootballPoolModel.Match" />
-          <EntitySet Name="MatchPools" EntityType="FootballPoolModel.MatchPool" />
           <EntitySet Name="MatchWeeks" EntityType="FootballPoolModel.MatchWeek" />
-          <EntitySet Name="Pools" EntityType="FootballPoolModel.Pool" />
           <EntitySet Name="sysdiagrams" EntityType="FootballPoolModel.sysdiagram" />
           <EntitySet Name="Teams" EntityType="FootballPoolModel.Team" />
           <EntitySet Name="Users" EntityType="FootballPoolModel.User" />
           <AssociationSet Name="FK_MatchWeek_League" Association="FootballPoolModel.FK_MatchWeek_League">
             <End Role="League" EntitySet="Leagues" />
             <End Role="MatchWeek" EntitySet="MatchWeeks" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Pool_League" Association="FootballPoolModel.FK_Pool_League">
-            <End Role="League" EntitySet="Leagues" />
-            <End Role="Pool" EntitySet="Pools" />
           </AssociationSet>
           <AssociationSet Name="FK_Team_League" Association="FootballPoolModel.FK_Team_League">
             <End Role="League" EntitySet="Leagues" />
@@ -258,77 +245,61 @@
             <End Role="MatchWeek" EntitySet="MatchWeeks" />
             <End Role="Match" EntitySet="Matches" />
           </AssociationSet>
-          <AssociationSet Name="FK_MatchPool_MatchWeek" Association="FootballPoolModel.FK_MatchPool_MatchWeek">
-            <End Role="MatchWeek" EntitySet="MatchWeeks" />
+          <EntitySet Name="Pools" EntityType="FootballPoolModel.Pool" />
+          <AssociationSet Name="FK_Pool_League" Association="FootballPoolModel.FK_Pool_League">
+            <End Role="League" EntitySet="Leagues" />
+            <End Role="Pool" EntitySet="Pools" />
+          </AssociationSet>
+          <EntitySet Name="PoolMembers" EntityType="FootballPoolModel.PoolMember" />
+          <AssociationSet Name="FK_PoolMember_Pool" Association="FootballPoolModel.FK_PoolMember_Pool">
+            <End Role="Pool" EntitySet="Pools" />
+            <End Role="PoolMember" EntitySet="PoolMembers" />
+          </AssociationSet>
+          <EntitySet Name="MatchPools" EntityType="FootballPoolModel.MatchPool" />
+          <AssociationSet Name="FK_MatchPool_Match" Association="FootballPoolModel.FK_MatchPool_Match">
+            <End Role="Match" EntitySet="Matches" />
             <End Role="MatchPool" EntitySet="MatchPools" />
           </AssociationSet>
           <AssociationSet Name="FK_MatchPool_User" Association="FootballPoolModel.FK_MatchPool_User">
             <End Role="User" EntitySet="Users" />
             <End Role="MatchPool" EntitySet="MatchPools" />
           </AssociationSet>
-          <AssociationSet Name="PoolMember" Association="FootballPoolModel.PoolMember">
-            <End Role="Pool" EntitySet="Pools" />
-            <End Role="User" EntitySet="Users" />
-          </AssociationSet>
-        </EntityContainer>
+          </EntityContainer>
         <EntityType Name="League">
           <Key>
             <PropertyRef Name="LeagueID" />
           </Key>
-          <Property Name="LeagueID" Type="Int32" Nullable="false" />
+          <Property Name="LeagueID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Image" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
           <NavigationProperty Name="MatchWeeks" Relationship="FootballPoolModel.FK_MatchWeek_League" FromRole="League" ToRole="MatchWeek" />
-          <NavigationProperty Name="Pools" Relationship="FootballPoolModel.FK_Pool_League" FromRole="League" ToRole="Pool" />
           <NavigationProperty Name="Teams" Relationship="FootballPoolModel.FK_Team_League" FromRole="League" ToRole="Team" />
+          <NavigationProperty Name="Pools" Relationship="FootballPoolModel.FK_Pool_League" FromRole="League" ToRole="Pool" />
         </EntityType>
         <EntityType Name="Match">
           <Key>
             <PropertyRef Name="MatchID" />
           </Key>
-          <Property Name="MatchID" Type="Int32" Nullable="false" />
+          <Property Name="MatchID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="MatchWeekID" Type="Int32" Nullable="false" />
-          <Property Name="LocalTeam" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="VisitorTeam" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="LocalTeam" Type="Int32" Nullable="false" />
+          <Property Name="VisitorTeam" Type="Int32" Nullable="false" />
           <Property Name="LocalScore" Type="Int32" Nullable="false" />
           <Property Name="VisitorScore" Type="Int32" Nullable="false" />
           <NavigationProperty Name="MatchWeek" Relationship="FootballPoolModel.FK_Match_MatchWeek" FromRole="Match" ToRole="MatchWeek" />
-        </EntityType>
-        <EntityType Name="MatchPool">
-          <Key>
-            <PropertyRef Name="MatchPoolID" />
-          </Key>
-          <Property Name="MatchPoolID" Type="Int32" Nullable="false" />
-          <Property Name="MatchWeekID" Type="Int32" Nullable="false" />
-          <Property Name="UserID" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="LocalScore" Type="Int32" />
-          <Property Name="VisitorScore" Type="Int32" />
-          <Property Name="Score" Type="Int32" Nullable="false" />
-          <Property Name="IsSaved" Type="String" Nullable="false" MaxLength="1" FixedLength="false" Unicode="false" />
-          <NavigationProperty Name="MatchWeek" Relationship="FootballPoolModel.FK_MatchPool_MatchWeek" FromRole="MatchPool" ToRole="MatchWeek" />
-          <NavigationProperty Name="User" Relationship="FootballPoolModel.FK_MatchPool_User" FromRole="MatchPool" ToRole="User" />
+          <NavigationProperty Name="MatchPools" Relationship="FootballPoolModel.FK_MatchPool_Match" FromRole="Match" ToRole="MatchPool" />
         </EntityType>
         <EntityType Name="MatchWeek">
           <Key>
             <PropertyRef Name="MatchWeekID" />
           </Key>
-          <Property Name="MatchWeekID" Type="Int32" Nullable="false" />
+          <Property Name="MatchWeekID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="LeagueID" Type="Int32" Nullable="false" />
-          <Property Name="StarDate" Type="DateTime" Nullable="false" Precision="0" />
-          <Property Name="EndDate" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="StarDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="EndDate" Type="DateTime" Nullable="false" Precision="3" />
           <NavigationProperty Name="League" Relationship="FootballPoolModel.FK_MatchWeek_League" FromRole="MatchWeek" ToRole="League" />
           <NavigationProperty Name="Matches" Relationship="FootballPoolModel.FK_Match_MatchWeek" FromRole="MatchWeek" ToRole="Match" />
-          <NavigationProperty Name="MatchPools" Relationship="FootballPoolModel.FK_MatchPool_MatchWeek" FromRole="MatchWeek" ToRole="MatchPool" />
-        </EntityType>
-        <EntityType Name="Pool">
-          <Key>
-            <PropertyRef Name="PoolID" />
-          </Key>
-          <Property Name="PoolID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="LeagueID" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="League" Relationship="FootballPoolModel.FK_Pool_League" FromRole="Pool" ToRole="League" />
-          <NavigationProperty Name="Users" Relationship="FootballPoolModel.PoolMember" FromRole="Pool" ToRole="User" />
         </EntityType>
         <EntityType Name="sysdiagram">
           <Key>
@@ -344,10 +315,10 @@
           <Key>
             <PropertyRef Name="TeamID" />
           </Key>
-          <Property Name="TeamID" Type="Int32" Nullable="false" />
+          <Property Name="TeamID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="LeagueID" Type="Int32" Nullable="false" />
           <Property Name="Name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="Image" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Image" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
           <NavigationProperty Name="League" Relationship="FootballPoolModel.FK_Team_League" FromRole="Team" ToRole="League" />
         </EntityType>
         <EntityType Name="User">
@@ -360,10 +331,11 @@
           <Property Name="Password" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="Email" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <NavigationProperty Name="MatchPools" Relationship="FootballPoolModel.FK_MatchPool_User" FromRole="User" ToRole="MatchPool" />
-          <NavigationProperty Name="Pools" Relationship="FootballPoolModel.PoolMember" FromRole="User" ToRole="Pool" />
         </EntityType>
         <Association Name="FK_MatchWeek_League">
-          <End Type="FootballPoolModel.League" Role="League" Multiplicity="1" />
+          <End Type="FootballPoolModel.League" Role="League" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
           <End Type="FootballPoolModel.MatchWeek" Role="MatchWeek" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="League">
@@ -374,20 +346,10 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_Pool_League">
-          <End Type="FootballPoolModel.League" Role="League" Multiplicity="1" />
-          <End Type="FootballPoolModel.Pool" Role="Pool" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="League">
-              <PropertyRef Name="LeagueID" />
-            </Principal>
-            <Dependent Role="Pool">
-              <PropertyRef Name="LeagueID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK_Team_League">
-          <End Type="FootballPoolModel.League" Role="League" Multiplicity="1" />
+          <End Type="FootballPoolModel.League" Role="League" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
           <End Type="FootballPoolModel.Team" Role="Team" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="League">
@@ -410,15 +372,76 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_MatchPool_MatchWeek">
-          <End Type="FootballPoolModel.MatchWeek" Role="MatchWeek" Multiplicity="1" />
+        <EntityType Name="Pool">
+          <Key>
+            <PropertyRef Name="PoolID" />
+          </Key>
+          <Property Name="PoolID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="LeagueID" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="League" Relationship="FootballPoolModel.FK_Pool_League" FromRole="Pool" ToRole="League" />
+          <NavigationProperty Name="PoolMembers" Relationship="FootballPoolModel.FK_PoolMember_Pool" FromRole="Pool" ToRole="PoolMember" />
+        </EntityType>
+        <Association Name="FK_Pool_League">
+          <End Type="FootballPoolModel.League" Role="League" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="FootballPoolModel.Pool" Role="Pool" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="League">
+              <PropertyRef Name="LeagueID" />
+            </Principal>
+            <Dependent Role="Pool">
+              <PropertyRef Name="LeagueID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="PoolMember">
+          <Key>
+            <PropertyRef Name="PoolID" />
+            <PropertyRef Name="UserID" />
+          </Key>
+          <Property Name="PoolID" Type="Int32" Nullable="false" />
+          <Property Name="UserID" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Pool" Relationship="FootballPoolModel.FK_PoolMember_Pool" FromRole="PoolMember" ToRole="Pool" />
+        </EntityType>
+        <Association Name="FK_PoolMember_Pool">
+          <End Type="FootballPoolModel.Pool" Role="Pool" Multiplicity="1" />
+          <End Type="FootballPoolModel.PoolMember" Role="PoolMember" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Pool">
+              <PropertyRef Name="PoolID" />
+            </Principal>
+            <Dependent Role="PoolMember">
+              <PropertyRef Name="PoolID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="MatchPool">
+          <Key>
+            <PropertyRef Name="MatchPoolID" />
+          </Key>
+          <Property Name="MatchPoolID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="MatchWeekID" Type="Int32" Nullable="false" />
+          <Property Name="UserID" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="LocalScore" Type="Int32" />
+          <Property Name="VisitorScore" Type="Int32" />
+          <Property Name="Score" Type="Int32" Nullable="false" />
+          <Property Name="IsSaved" Type="String" Nullable="false" MaxLength="1" FixedLength="false" Unicode="false" />
+          <Property Name="PoolID" Type="Int32" Nullable="false" />
+          <Property Name="MatchID" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Match" Relationship="FootballPoolModel.FK_MatchPool_Match" FromRole="MatchPool" ToRole="Match" />
+          <NavigationProperty Name="User" Relationship="FootballPoolModel.FK_MatchPool_User" FromRole="MatchPool" ToRole="User" />
+        </EntityType>
+        <Association Name="FK_MatchPool_Match">
+          <End Type="FootballPoolModel.Match" Role="Match" Multiplicity="1" />
           <End Type="FootballPoolModel.MatchPool" Role="MatchPool" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="MatchWeek">
-              <PropertyRef Name="MatchWeekID" />
+            <Principal Role="Match">
+              <PropertyRef Name="MatchID" />
             </Principal>
             <Dependent Role="MatchPool">
-              <PropertyRef Name="MatchWeekID" />
+              <PropertyRef Name="MatchID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -434,11 +457,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="PoolMember">
-          <End Type="FootballPoolModel.Pool" Role="Pool" Multiplicity="*" />
-          <End Type="FootballPoolModel.User" Role="User" Multiplicity="*" />
-        </Association>
-      </Schema>
+        </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
     <edmx:Mappings>
@@ -447,6 +466,7 @@
           <EntitySetMapping Name="Leagues">
             <EntityTypeMapping TypeName="FootballPoolModel.League">
               <MappingFragment StoreEntitySet="League">
+                <ScalarProperty Name="Image" ColumnName="Image" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="LeagueID" ColumnName="LeagueID" />
               </MappingFragment>
@@ -464,19 +484,6 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="MatchPools">
-            <EntityTypeMapping TypeName="FootballPoolModel.MatchPool">
-              <MappingFragment StoreEntitySet="MatchPool">
-                <ScalarProperty Name="IsSaved" ColumnName="IsSaved" />
-                <ScalarProperty Name="Score" ColumnName="Score" />
-                <ScalarProperty Name="VisitorScore" ColumnName="VisitorScore" />
-                <ScalarProperty Name="LocalScore" ColumnName="LocalScore" />
-                <ScalarProperty Name="UserID" ColumnName="UserID" />
-                <ScalarProperty Name="MatchWeekID" ColumnName="MatchWeekID" />
-                <ScalarProperty Name="MatchPoolID" ColumnName="MatchPoolID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="MatchWeeks">
             <EntityTypeMapping TypeName="FootballPoolModel.MatchWeek">
               <MappingFragment StoreEntitySet="MatchWeek">
@@ -485,15 +492,6 @@
                 <ScalarProperty Name="LeagueID" ColumnName="LeagueID" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="MatchWeekID" ColumnName="MatchWeekID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="Pools">
-            <EntityTypeMapping TypeName="FootballPoolModel.Pool">
-              <MappingFragment StoreEntitySet="Pool">
-                <ScalarProperty Name="LeagueID" ColumnName="LeagueID" />
-                <ScalarProperty Name="Name" ColumnName="Name" />
-                <ScalarProperty Name="PoolID" ColumnName="PoolID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -529,14 +527,38 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <AssociationSetMapping Name="PoolMember" TypeName="FootballPoolModel.PoolMember" StoreEntitySet="PoolMember">
-            <EndProperty Name="User">
-              <ScalarProperty Name="UserID" ColumnName="UserID" />
-            </EndProperty>
-            <EndProperty Name="Pool">
-              <ScalarProperty Name="PoolID" ColumnName="PoolID" />
-            </EndProperty>
-          </AssociationSetMapping>
+          <EntitySetMapping Name="Pools">
+            <EntityTypeMapping TypeName="FootballPoolModel.Pool">
+              <MappingFragment StoreEntitySet="Pool">
+                <ScalarProperty Name="LeagueID" ColumnName="LeagueID" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="PoolID" ColumnName="PoolID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PoolMembers">
+            <EntityTypeMapping TypeName="FootballPoolModel.PoolMember">
+              <MappingFragment StoreEntitySet="PoolMember">
+                <ScalarProperty Name="UserID" ColumnName="UserID" />
+                <ScalarProperty Name="PoolID" ColumnName="PoolID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="MatchPools">
+            <EntityTypeMapping TypeName="FootballPoolModel.MatchPool">
+              <MappingFragment StoreEntitySet="MatchPool">
+                <ScalarProperty Name="MatchID" ColumnName="MatchID" />
+                <ScalarProperty Name="PoolID" ColumnName="PoolID" />
+                <ScalarProperty Name="IsSaved" ColumnName="IsSaved" />
+                <ScalarProperty Name="Score" ColumnName="Score" />
+                <ScalarProperty Name="VisitorScore" ColumnName="VisitorScore" />
+                <ScalarProperty Name="LocalScore" ColumnName="LocalScore" />
+                <ScalarProperty Name="UserID" ColumnName="UserID" />
+                <ScalarProperty Name="MatchWeekID" ColumnName="MatchWeekID" />
+                <ScalarProperty Name="MatchPoolID" ColumnName="MatchPoolID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

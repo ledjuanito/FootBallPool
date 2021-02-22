@@ -18,18 +18,19 @@ namespace FootBallPool.Models
         public League()
         {
             this.MatchWeeks = new HashSet<MatchWeek>();
-            this.Pools = new HashSet<Pool>();
             this.Teams = new HashSet<Team>();
+            this.Pools = new HashSet<Pool>();
         }
     
         public int LeagueID { get; set; }
         public string Name { get; set; }
+        public string Image { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<MatchWeek> MatchWeeks { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Pool> Pools { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Team> Teams { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Pool> Pools { get; set; }
     }
 }

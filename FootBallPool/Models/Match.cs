@@ -14,13 +14,21 @@ namespace FootBallPool.Models
     
     public partial class Match
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public Match()
+        {
+            this.MatchPools = new HashSet<MatchPool>();
+        }
+    
         public int MatchID { get; set; }
         public int MatchWeekID { get; set; }
-        public string LocalTeam { get; set; }
-        public string VisitorTeam { get; set; }
+        public int LocalTeam { get; set; }
+        public int VisitorTeam { get; set; }
         public int LocalScore { get; set; }
         public int VisitorScore { get; set; }
     
         public virtual MatchWeek MatchWeek { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<MatchPool> MatchPools { get; set; }
     }
 }

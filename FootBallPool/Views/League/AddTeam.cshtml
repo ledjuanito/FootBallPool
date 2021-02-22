@@ -1,0 +1,33 @@
+﻿@model FootBallPool.Models.Team
+@{
+    ViewBag.Title = "AddTeam";
+}
+
+<h2>Add Team</h2>
+<hr />
+
+@using (Html.BeginForm("AddTeam", "League", FormMethod.Post))
+{
+    @Html.AntiForgeryToken()
+    @Html.HiddenFor(m => m.LeagueID)
+
+<div class="form-horizontal" style="text-align:center">
+    <div class="form-group">
+        <div class="col-xs-3">Name</div>
+        <div class="col-xs-3">
+            @Html.TextBoxFor(m => m.Name, new { @class = "form-control" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        <div class="col-xs-3">@Html.DisplayNameFor(m => m.Image)</div>
+        <div class="col-xs-3">
+            @Html.TextBoxFor(m => m.Image, new { @class = "form-control" })
+            @Html.ValidationMessageFor(m => m.Image)
+        </div>
+    </div>
+    <button class="btn btn-success" type="submit">Save</button>
+    <a href="@Url.Action("TeamIndex","League",new { id = Model.LeagueID})" class="btn btn-primary">Cancel</a>
+</div>
+}
+

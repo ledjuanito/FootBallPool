@@ -21,8 +21,10 @@ namespace FootBallPool.Models
         public Nullable<int> VisitorScore { get; set; }
         public int Score { get; set; }
         public string IsSaved { get; set; }
+        public int PoolID { get; set; }
+        public int MatchID { get; set; }
     
-        public virtual MatchWeek MatchWeek { get; set; }
+        public virtual Match Match { get; set; }
         public virtual User User { get; set; }
     }
 }

@@ -17,7 +17,7 @@ namespace FootBallPool.Models
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Pool()
         {
-            this.Users = new HashSet<User>();
+            this.PoolMembers = new HashSet<PoolMember>();
         }
     
         public int PoolID { get; set; }
@@ -26,6 +26,6 @@ namespace FootBallPool.Models
     
         public virtual League League { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<User> Users { get; set; }
+        public virtual ICollection<PoolMember> PoolMembers { get; set; }
     }
 }

@@ -1,0 +1,76 @@
+﻿@model IEnumerable<FootBallPool.Models.PoolMember>
+@{
+    ViewBag.Title = "Pool Index";
+}
+<script>
+    function OpenJoinPool() {
+        $('#join-pool-modal').modal('show');
+    };
+</script>
+<h2>Pool Index</h2>
+<hr />
+<button type="button" class="btn btn-default" onclick="OpenJoinPool()">Join Pool</button>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>
+                Name
+            </th>
+            <th>
+                Pool
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @item.Pool.Name
+                </td>
+                <td>
+                    @item.Pool.League.Name
+                </td>
+                <td>
+                    <a href="@Url.Action("AddMembers","Pool",new { id = item.PoolID })" data-toggle="tooltip" title="Add Members" style="padding:0 10px"><i class="fas fa-user-plus" style="font-size:3vh"></i> </a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@using (Html.BeginForm("JoinPool", "Pool"))
+{
+    @Html.AntiForgeryToken()
+    <!--Join modal-->
+    <div id="join-pool-modal" class="modal fade" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-sm" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <div class="col-xs-8">
+                        <h3 style="margin:0">Join Pool</h3>
+                    </div>
+                    <div class="col-xs-4">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    </div>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <div class="col-xs-4">
+                            <label style="margin:5px 0">Pool ID</label>
+                        </div>
+                        <div class="col-xs-8">
+                            @Html.TextBox("id", string.Empty, new { @class = "form-control" })
+                        </div>
+                    </div>
+                    <br />
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-success" >Join</button>
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+}

@@ -1,0 +1,44 @@
+﻿@model IEnumerable<FootBallPool.Models.Match>
+@{
+    ViewBag.Title = "Fixtures & Results";
+    Dictionary<int, FootBallPool.Models.Team> TeamMap = (Dictionary<int, FootBallPool.Models.Team>)ViewBag.Teams;
+}
+
+<h2>Fixtures & Results</h2>
+<hr />
+@if ((bool)ViewBag.allowAdd)
+{
+    <a class="btn btn-default" href="@Url.Action("AddFixture","League",new { id = (int)ViewBag.MatchWeekID })"><i class="fas fa-futbol" style="font-size:2vh"></i> Add Match</a>
+}
+
+@{
+    string matchweek = null;
+    foreach (var item in Model)
+    {
+        if (matchweek != item.MatchWeek.Name)
+        {
+            matchweek = item.MatchWeek.Name;
+            <br />
+            <h1 style="text-align:center;background-color:darkred;color:white;border-radius:5px">@item.MatchWeek.Name</h1>
+
+        }
+
+        <div class="match">
+            <h3>@item.MatchWeek.Name</h3>
+            <div class="row">
+                <div class="col-xs-6">
+                    <strong>@TeamMap[item.LocalTeam].Name</strong>
+                    <img src="@TeamMap[item.LocalTeam].Image" />
+                </div>
+                <div class="col-xs-6">
+                    <strong>@TeamMap[item.VisitorTeam].Name</strong>
+                    <img src="@TeamMap[item.VisitorTeam].Image" />
+                </div>
+
+                <h2 class="result">@item.LocalScore - @item.VisitorScore</h2>
+            </div>
+        </div>
+    }
+}
+
+

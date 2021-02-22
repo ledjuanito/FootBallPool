@@ -1,0 +1,34 @@
+﻿@model IEnumerable<FootBallPool.Models.Team>
+@{
+    ViewBag.Title = "TeamIndex";
+}
+
+<h2>Teams</h2>
+<hr />
+<a class="btn btn-default" href="@Url.Action("AddTeam","League",new { id = (int)ViewBag.LeagueID })">Add Team</a>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>@Html.DisplayNameFor(m => m.Image)</th>
+            <th>@Html.DisplayNameFor(m => m.Name)</th>
+            <th>@Html.DisplayNameFor(m => m.LeagueID)</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+        <tr>
+            <td>
+                <img src="@item.Image" style="width:5vh" />
+            </td>
+            <td>
+                @Html.DisplayTextFor(m => item.Name)
+            </td>
+            <td>
+                @Html.DisplayTextFor(m => item.League.Name)
+            </td>
+        </tr>
+        }
+    </tbody>
+</table>
+
